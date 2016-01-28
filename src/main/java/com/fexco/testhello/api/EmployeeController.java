@@ -6,10 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * Created by cgriffin on 27/01/16.
@@ -20,7 +19,7 @@ public class EmployeeController {
     EmployeeService employee;
 
 
-    @RequestMapping(path = "/api/ids/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(path = "/api/employees/ids/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Employee> findEmployeeById(@PathVariable("id") int id) {
         Employee tempEmployee = employee.findById(id);
 
@@ -32,7 +31,7 @@ public class EmployeeController {
 
     }
 
-    @RequestMapping(path = "/api/salaries/{salary}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(path = "/api/employees/salaries/{salary}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Employee> findEmployeeById(@PathVariable("salary") double salary) {
         Employee tempEmployee = employee.findBySalary(salary);
 
@@ -44,7 +43,7 @@ public class EmployeeController {
 
     }
 
-    @RequestMapping(value = "/api/names/{name}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/api/employees/names/{name}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Employee> getEmployeeByName(@PathVariable("name") String name) {
         Employee tempEmp = employee.findByName(name);
 
@@ -54,5 +53,49 @@ public class EmployeeController {
 
         return new ResponseEntity<>(tempEmp, HttpStatus.OK);
     }
+
+
+    @RequestMapping(path = "/api/employees", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    ResponseEntity<List<Employee>> getAllEmployees() {
+        List<Employee> allEmployees = employee.getAllEmployees();
+        return new ResponseEntity<>(allEmployees, HttpStatus.OK);
+    }
+
+    @RequestMapping(path = "/api/employees", method = RequestMethod.POST)
+    ResponseEntity<Employee> createEmployee(@RequestBody Employee empl) {
+        employee.createEmployee(empl.getName(), empl.getSalary());
+        return new ResponseEntity<>(empl, HttpStatus.CREATED);
+    }
+
+
+    @RequestMapping(path = "/api/employees/{id}", method = RequestMethod.PUT)
+    ResponseEntity<Employee> updateEmployee(@PathVariable("id") int id, @RequestBody Employee empl) {
+        Employee tempEmp = employee.findById(id);
+
+        if (tempEmp == null) {
+            return new ResponseEntity<Employee>(HttpStatus.NOT_FOUND);
+        }
+
+        tempEmp.setName(empl.getName());
+        tempEmp.setSalary(empl.getSalary());
+
+        return new ResponseEntity<Employee>(tempEmp, HttpStatus.OK);
+    }
+
+
+    @RequestMapping(path = "/api/employees/{id}", method = RequestMethod.DELETE)
+    ResponseEntity<?> deleteEmployee(@PathVariable("id") int id) {
+        Employee tempEmp = employee.findById(id);
+
+        if (tempEmp == null) {
+
+            return new ResponseEntity<>("Error. No match was found to delete.", HttpStatus.NOT_FOUND);
+        }
+
+        employee.deleteEmployee(tempEmp);
+
+        return new ResponseEntity<Employee>(tempEmp, HttpStatus.OK);
+    }
+
 
 }
