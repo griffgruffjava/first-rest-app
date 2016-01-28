@@ -1,2 +1,7 @@
-target
-.idea
+# IntelliJ Directories and Files
+.iml
+/.idea
+
+# Generated Directories and Files
+/target
+/build
