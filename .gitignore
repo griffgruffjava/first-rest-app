@@ -5,3 +5,6 @@
 # Generated Directories and Files
 /target
 /build
+.idea
+target
+/*.iml
