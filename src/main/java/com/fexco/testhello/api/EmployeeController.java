@@ -67,8 +67,7 @@ public class EmployeeController {
 
     @RequestMapping(path = "/api/employees", method = RequestMethod.POST)
     ResponseEntity<Employee> createEmployee(@RequestBody Employee empl) {
-        employee.createEmployee(empl.getName(), empl.getSalary());
-        return new ResponseEntity<>(empl, HttpStatus.CREATED);
+        return new ResponseEntity<>(employee.createEmployee(empl.getName(), empl.getSalary()), HttpStatus.CREATED);
     }
 
 

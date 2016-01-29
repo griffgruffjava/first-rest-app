@@ -67,8 +67,11 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public void createEmployee(String name, double salary) {
-        employeeList.add(new Employee(counter.getAndIncrement(), name, salary));
+    public Employee createEmployee(String name, double salary)
+    {
+        Employee employee = new Employee(counter.getAndIncrement(), name, salary);
+        employeeList.add(employee);
+        return employee;
     }
 
     @Override

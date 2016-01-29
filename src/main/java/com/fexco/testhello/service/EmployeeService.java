@@ -17,7 +17,7 @@ public interface EmployeeService {
 
     List<Employee> getAllEmployees();
 
-    void createEmployee(String name, double salary);
+    Employee createEmployee(String name, double salary);
 
     void updateEmployee(Employee empl);
 
